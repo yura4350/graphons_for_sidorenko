@@ -75,17 +75,21 @@ def perturb(W):
     increase_indices = all_indices[:1]
     decrease_indices = all_indices[1:2]
 
+    # Generating a random change value for both increasing and decreasing
+    increase_change = random.uniform(0.001, 0.005)
+    decrease_change = random.uniform(0.001, 0.005)
+
     for i, j in increase_indices:
-        if W_new[i, j] + 0.005 > 1.0:
+        if W_new[i, j] + increase_change > 1.0:
             return W
     for i, j in decrease_indices:
-        if W_new[i, j] - 0.005 < 0.0:
+        if W_new[i, j] - decrease_change < 0.0:
             return W
 
     for i, j in increase_indices:
-        W_new[i, j] += 0.005
+        W_new[i, j] += increase_change
     for i, j in decrease_indices:
-        W_new[i, j] -= 0.005
+        W_new[i, j] -= decrease_change
     return W_new
 
 def optimize_graphon(H, W, steps=100):

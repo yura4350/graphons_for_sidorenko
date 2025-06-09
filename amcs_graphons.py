@@ -50,6 +50,8 @@ def AMCS_graphon(H, initial_W, max_depth=5, max_level=3):
         next_score = score_function(next_W)
 
         print(f"Best score (lvl {level}, dpt {depth}, search steps {nmcs_steps}): {max(next_score, current_score):.4e}")
+        print("New best W:")
+        print(np.round(current_W, 3))
 
         # --- Adaptive Logic ---
         if next_score > current_score:
