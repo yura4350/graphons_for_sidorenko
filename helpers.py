@@ -2,6 +2,7 @@ import numpy as np
 import itertools
 import random
 from itertools import product
+from numba import njit  # library to optimize performance
 
 def count_homomorphisms_backtrack(H_adj, G_adj):
     h = H_adj.shape[0]
@@ -46,19 +47,56 @@ def sidorenko_ratio(H_adj, G_adj):
     num_edges_H = int(np.sum(H_adj) // 2)
     return (p ** num_edges_H / t - 1)
 
+@njit # numba decorator
+def _compute_t_recursive(n, edges, W_block, assignment, pos):
+    """
+    A Numba-friendly recursive helper to replace itertools.product.
+    This function calculates the sum of probabilities for all possible assignments.
+    """
+    # Base Case: If the assignment is fully built (pos == n)
+    if pos == n:
+        # Calculate the probability for this one complete assignment
+        prob = 1.0
+        for i in range(len(edges)):
+            u, v = edges[i]
+            prob *= W_block[assignment[u], assignment[v]]
+        return prob
+
+    # Recursive Step: Iterate through possibilities for the current position
+    total_prob = 0.0
+    num_blocks = W_block.shape[0]
+    for i in range(num_blocks):
+        assignment[pos] = i
+        # Recurse to fill the next position and add the result
+        total_prob += _compute_t_recursive(n, edges, W_block, assignment, pos + 1)
+    
+    return total_prob
+
+@njit # numba decorator
 def compute_t_G_W(H, W_block):
+    """
+    This function uses the recursive helper to perform its calculation
+    in a Numba-compatible way.
+    """
     n = H.shape[0]
-    edges = [(i, j) for i in range(n) for j in range(i + 1, n) if H[i, j] == 1]
+    
+    # Create a list of edges.
+    # Creating a numpy array for numba
+    edge_list = []
+    for i in range(n):
+        for j in range(i + 1, n):
+            if H[i, j] == 1:
+                edge_list.append((i, j))
+    edges = np.array(edge_list, dtype=np.int64)
+
     num_blocks = W_block.shape[0]
     block_volume = 1.0 / num_blocks
-    t = 0.0
-
-    for assignment in product(range(num_blocks), repeat=n):
-        prob = 1.0
-        for (u, v) in edges:
-            prob *= W_block[assignment[u], assignment[v]]
-        t += prob * (block_volume ** n)
-
+    
+    # call to the recursive function
+    assignment = np.zeros(n, dtype=np.int64)
+    total_prob_sum = _compute_t_recursive(n, edges, W_block, assignment, 0)
+    
+    t = total_prob_sum * (block_volume ** n)
     return t
 
 def sidorenko_gap(H, W_block):
