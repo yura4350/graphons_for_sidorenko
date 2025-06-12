@@ -126,8 +126,10 @@ def perturb(W):
 
     for i, j in increase_indices:
         W_new[i, j] += increase_change
+        W_new[j, i] += increase_change
     for i, j in decrease_indices:
         W_new[i, j] -= decrease_change
+        W_new[j, i] -= decrease_change
     return W_new
 
 def optimize_graphon(H, W, steps=100):
