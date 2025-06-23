@@ -53,8 +53,6 @@ If such a `W` is found, it would serve as a concrete counterexample and disprove
 
 ## Project Structure
 
-
-.
 ├── amcs_for_graphon_demo.py  # Main script to define H, W_initial and run the AMCS
 ├── amcs_graphons.py          # Implements the core AMCS and NMCS algorithms
 ├── helpers.py                # Helper functions for calculations (sidorenko_gap, perturb, etc.)
