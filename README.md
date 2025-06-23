@@ -53,12 +53,21 @@ If such a `W` is found, it would serve as a concrete counterexample and disprove
 
 ## Project Structure
 
-├── amcs_for_graphon_demo.py  # Main script to define H, W_initial and run the AMCS
-├── amcs_graphons.py          # Implements the core AMCS and NMCS algorithms
-├── helpers.py                # Helper functions for calculations (sidorenko_gap, perturb, etc.)
-├── older_demos/                # Contains older demo files used in previous calculations
-└── README.md                   # This file
+This document outlines the structure of the project, detailing the purpose of each file and directory.
 
+### Files
+
+* **`amcs_for_graphon_demo.py`**: This is the main script for running demonstrations. It defines the input graphons, denoted as $H$ and $W_{\text{initial}}$, and executes the Adaptive Monte Carlo Search (AMCS) to analyze them.
+
+* **`amcs_graphons.py`**: This file contains the core implementations of the Adaptive Monte Carlo Search (AMCS) and Nested Monte Carlo Search (NMCS) algorithms as they are applied to graphons. These algorithms are likely used for searching for counterexamples to conjectures in graph theory.
+
+* **`helpers.py`**: A collection of helper functions that support the main scripts. This includes mathematical calculations such as the `sidorenko_gap` and functions for `perturb`ing graphons, which are essential for the iterative nature of the search algorithms.
+
+* **`README.md`**: This file, providing an overview and description of the project structure.
+
+### Directories
+
+* **`older_demos/`**: This directory serves as an archive for demo files and scripts that were used in previous versions or for earlier calculations. It helps to keep the main directory clean while preserving historical work.
 
 ## How to Run the Experiments
 
