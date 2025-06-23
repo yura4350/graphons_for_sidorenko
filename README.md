@@ -1,4 +1,4 @@
-# Disproving Sidorenko's Conjecture: A Numerical Exploration
+# Disproving Sidorenko's Conjecture
 
 ## Overview
 
